@@ -37,7 +37,7 @@ module.exports = async function (dbClient, port = 0) {
     // }
   })
   
-  app.post('/register', async (req, res) => {
+  app.post('/users/register', async (req, res) => {
     const { email, password } = req.body
     const created = await accounts.create(email, password)
     if (created) {
