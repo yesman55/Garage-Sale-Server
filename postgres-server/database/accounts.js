@@ -4,27 +4,41 @@ module.exports = function (client) {
 
   dbAccounts.checkLogin = async function (email, password) {
     const { rowCount } = await client.query({
-      text: 'SELECT * FROM users WHERE email = $2 AND password = $3',
+      text: 'SELECT * FROM users WHERE email = $1 AND password = $2',
       values: [ email, password ]
     })
     return rowCount > 0
   }
 
-  dbAccounts.createAccount = async function (email, password, firstName, lastName, studentID, image) {
+  dbAccounts.createAccount = async function (registerObj) {
+    const { user_id, password, firstName, lastName, email, id_photo} = registerObj;
+    const name = firstName + ' ' + lastName
     const validated = false;
     const { rowCount } = await client.query({
-      text: 'INSERT INTO users (studentID, email, password, firstName, lastName, image, validated) VALUES ($1, $2, $3, $4, $5, $6)',
-      values: [ studentID, email, password, firstName, lastName, image, validated]
+      text: 'INSERT INTO users (user_id, password, name, email, id_photo, validated) VALUES ($1, $2, $3, $4, $5, $6)',
+      values: [ user_id, password, name, email, id_photo, validated ]
     })
     return rowCount > 0
   }
 
   dbAccounts.getUser = async function (email) {
     const { rows } = await client.query({
-      text: 'SELECT * FROM profiles WHERE email = $1',
+      text: 'SELECT * FROM users WHERE email = $1',
       values: [ email ]
     })
     return rows[0] || null
+  }
+  dbAccounts.addItem = async function () {
+    const {  rowCount  } = await client.query({
+      text: 'INSERT INTO items (item_id, price, item_name, item_descr, date_added, user_id, area_code, sold, seller_ids) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+      values: []
+    })
+    return rowCount > 0
+  }
+  dbAccounts.removeItem = async function () {
+    const {  rowCount  } = await client.query({
+
+    })
   }
 
   dbAccounts.login = async function (email) {

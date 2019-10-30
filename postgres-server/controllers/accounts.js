@@ -23,15 +23,17 @@ module.exports = function (dbClient) {
     return db.checkLogin(email, pass)
   }
 
-  accounts.create = async function (email, password) {
-    const user = await accounts.getUser(email)
+
+  accounts.createUser = async function (registerObj) {
+    const user = await accounts.getUser(registerObj.email)
     if (user) {
       const err = Error('Account already exists')
       err.statusCode = 400
       throw err
     }
-    const encryptedPass = await encrypt(password)
-    return db.createAccount(email, encryptedPass)
+    const encryptedPass = await encrypt(registerObj.password)
+    registerObj.password = encryptedPass
+    return db.createAccount(registerObj)
   }
 
   accounts.getUser = async function (email) {
@@ -41,8 +43,8 @@ module.exports = function (dbClient) {
   accounts.login = async function (email, password) {
     const loginOk = await accounts.checkLogin(email, password)
     if (!loginOk) return null
-    await db.login(email)
-    return db.getUser(email)
+    // await db.login(email)
+    return await db.getUser(email)
   }
 
   accounts.logout = async function (email) {
