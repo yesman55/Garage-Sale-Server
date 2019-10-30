@@ -14,7 +14,7 @@ module.exports = async function (dbClient, port = 0) {
   app.get('/', function(req, res) {
     res.sendStatus(200)
   });
-  app.put('/login', async (req, res) => {
+  app.post('/users/authenticate', async (req, res) => {
     // TODO
     const { email, password } = req.body
     const user = await accounts.login(email, password)
