@@ -17,12 +17,9 @@ module.exports = function (dbClient) {
     const password = await encrypt(newPassword)
     return db.updatePassword(email, password)
   }
-
-  accounts.checkLogin = async function (email, password) {
-    const pass = await encrypt(password)
-    return db.checkLogin(email, pass)
+  accounts.update = async function (email, name, phone) {
+    return db.updateUser(email, name, phone)
   }
-
 
   accounts.createUser = async function (registerObj) {
     const user = await accounts.getUser(registerObj.email)
@@ -46,13 +43,20 @@ module.exports = function (dbClient) {
     // await db.login(email)
     return await db.getUser(email)
   }
+  accounts.checkLogin = async function (email, password) {
+    const pass = await encrypt(password)
+    return db.checkLogin(email, pass)
+  }
 
   accounts.logout = async function (email) {
     return db.logout(email)
   }
 
-  accounts.update = async function (email, name, phone) {
-    return db.updateUser(email, name, phone)
+  accounts.addItem = async function (itemObj) {
+    itemObj.date_added = Date.now()
+    itemObj.sold = "false"
+    const success = db.addItem(itemObj)
+    return success
   }
 
   return accounts

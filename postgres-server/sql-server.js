@@ -16,7 +16,7 @@ module.exports = async function (dbClient, port = 0) {
   });
   app.post('/users/authenticate', async (req, res) => {
     const { email, password } = req.body
-    console.log(password + ' ' + typeof password)
+    console.log(email + ' ' + password)
     const user = await accounts.login(email, password)
     if (user) {
       res.json(user)
@@ -24,6 +24,19 @@ module.exports = async function (dbClient, port = 0) {
       res.sendStatus(400)
     }
   })
+
+  app.post('/users/addItem', async (req, res) => {
+    const {  item_name, item_descr, price, user_id, area_code, seller_id } = req.body
+    console.log(item_name + ' ' + item_descr)
+    const success = await accounts.addItem({  item_name, item_descr, price, user_id, area_code, seller_id })
+    if(success){
+      res.sendStatus(200)
+    }
+    else{
+      res.sendStatus(400)
+    }
+  })
+
 
   app.post('/change-password', async (req, res) => {
     // const { newPassword, oldPassword } = req.body
