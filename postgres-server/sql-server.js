@@ -15,10 +15,9 @@ module.exports = async function (dbClient, port = 0) {
     res.sendStatus(200)
   });
   app.post('/users/authenticate', async (req, res) => {
-    // TODO
     const { email, password } = req.body
+    console.log(password + ' ' + typeof password)
     const user = await accounts.login(email, password)
-
     if (user) {
       res.json(user)
     } else {
@@ -38,9 +37,10 @@ module.exports = async function (dbClient, port = 0) {
   })
   
   app.post('/users/register', async (req, res) => {
-    const { email, password } = req.body
-    const created = await accounts.create(email, password)
-    if (created) {
+    const { user_id, password, firstName, lastName, email, id_photo } = req.body;
+    console.log(email + ' ' + password)
+    const User = await accounts.createUser({ user_id, password, firstName, lastName, email, id_photo })
+    if (User) {
       res.sendStatus(200)
     } else {
       res.sendStatus(400)
