@@ -1,31 +1,44 @@
-
 module.exports = function (client) {
   const dbAccounts = {}
 
   dbAccounts.checkLogin = async function (email, password) {
-    const { rowCount } = await client.query({
+    const {
+      rowCount
+    } = await client.query({
       text: 'SELECT * FROM users WHERE email = $1 AND password = $2',
-      values: [ email, password ]
+      values: [email, password]
     })
     return rowCount > 0
   }
 
   dbAccounts.createAccount = async function (registerObj) {
-    const { user_id, password, firstName, lastName, email, id_photo} = registerObj;
+    const {
+      user_id,
+      password,
+      firstName,
+      lastName,
+      email,
+      id_photo
+    } = registerObj;
     const name = firstName + ' ' + lastName
     const validated = false;
-    const { rowCount } = await client.query({
+    const {
+      rowCount
+    } = await client.query({
       text: 'INSERT INTO users (user_id, password, name, email, id_photo, validated) VALUES ($1, $2, $3, $4, $5, $6)',
-      values: [ user_id, password, name, email, id_photo, validated ]
+      values: [user_id, password, name, email, id_photo, validated]
     })
     return rowCount > 0
   }
 
   dbAccounts.getUser = async function (email) {
-    const { rows } = await client.query({
+    const {
+      rows
+    } = await client.query({
       text: 'SELECT * FROM users WHERE email = $1',
-      values: [ email ]
+      values: [email]
     })
+
     return rows[0] || null
   }
   dbAccounts.addItem = async function (itemObj) {
@@ -64,17 +77,21 @@ module.exports = function (client) {
   }
 
   dbAccounts.update = async function (email, name, phone) {
-    const { rows } = await client.query({
+    const {
+      rows
+    } = await client.query({
       text: 'UPDATE profiles SET name = $1 AND phone = $2 WHERE email = $3',
-      values: [ name, phone, email ]
+      values: [name, phone, email]
     })
     return rows[0] || null
   }
 
   dbAccounts.updatePassword = async function (email, newPassword) {
-    const { rowCount } = await client.query({
+    const {
+      rowCount
+    } = await client.query({
       text: 'UPDATE logins SET password = $1 WHERE email = $2',
-      values: [ password, email ]
+      values: [password, email]
     })
     return rowCount > 0
   }

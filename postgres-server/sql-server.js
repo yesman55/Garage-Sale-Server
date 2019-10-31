@@ -6,20 +6,27 @@ const cors = require('cors')
 module.exports = async function (dbClient, port = 0) {
   const app = express()
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.urlencoded({
+    extended: false
+  }));
   app.use(cors())
 
   const accounts = Accounts(dbClient)
-  
-  app.get('/', function(req, res) {
+
+  app.get('/', function (req, res) {
     res.sendStatus(200)
   });
 
   app.post('/users/authenticate', async (req, res) => {
-    const { email, password } = req.body
-    console.log(email + ' ' + password)
+    const {
+      email,
+      password
+    } = req.body
+    console.log(password + ' ' + typeof password)
+    console.log(req.body)
     const user = await accounts.login(email, password)
     if (user) {
+      console.log(user)
       res.json(user)
     } else {
       res.sendStatus(400)
@@ -55,11 +62,32 @@ module.exports = async function (dbClient, port = 0) {
     //   res.status(400).send('Incorrect email or password')
     // }
   })
-  
+
   app.post('/users/register', async (req, res) => {
-    const { user_id, password, firstName, lastName, email, id_photo } = req.body;
-    console.log(email + ' ' + password)
-    const User = await accounts.createUser({ user_id, password, firstName, lastName, email, id_photo })
+    const {
+      user_id,
+      password,
+      firstName,
+      lastName,
+      email,
+      id_photo
+    } = req.body;
+    console.log({
+      user_id,
+      password,
+      firstName,
+      lastName,
+      email,
+      id_photo
+    })
+    const User = await accounts.createUser({
+      user_id,
+      password,
+      firstName,
+      lastName,
+      email,
+      id_photo
+    })
     if (User) {
       res.sendStatus(200)
     } else {

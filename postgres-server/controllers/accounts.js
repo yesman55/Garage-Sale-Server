@@ -30,11 +30,11 @@ module.exports = function (dbClient) {
     }
     const encryptedPass = await encrypt(registerObj.password)
     registerObj.password = encryptedPass
-    return db.createAccount(registerObj)
+    return await db.createAccount(registerObj)
   }
 
   accounts.getUser = async function (email) {
-    return db.getUser(email)
+    return await db.getUser(email)
   }
 
   accounts.login = async function (email, password) {
@@ -45,7 +45,7 @@ module.exports = function (dbClient) {
   }
   accounts.checkLogin = async function (email, password) {
     const pass = await encrypt(password)
-    return db.checkLogin(email, pass)
+    return await db.checkLogin(email, pass)
   }
 
   accounts.logout = async function (email) {
@@ -82,7 +82,7 @@ module.exports = function (dbClient) {
   return accounts
 }
 
-function encrypt (password) {
+function encrypt(password) {
   return new Promise((resolve, reject) => {
     crypto.pbkdf2(password, secret, 100000, 64, 'sha512', (err, derivedKey) => {
       if (err) return reject(err)
