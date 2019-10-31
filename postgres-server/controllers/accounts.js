@@ -1,6 +1,6 @@
 const dbAccounts = require('../database/accounts')
 const crypto = require('crypto')
-
+const uuidv4 = require('uuid/v4')
 const secret = process.env.secret || 'this is a terrible secret'
 
 module.exports = function (dbClient) {
@@ -17,12 +17,9 @@ module.exports = function (dbClient) {
     const password = await encrypt(newPassword)
     return db.updatePassword(email, password)
   }
-
-  accounts.checkLogin = async function (email, password) {
-    const pass = await encrypt(password)
-    return await db.checkLogin(email, pass)
+  accounts.update = async function (email, name, phone) {
+    return db.updateUser(email, name, phone)
   }
-
 
   accounts.createUser = async function (registerObj) {
     const user = await accounts.getUser(registerObj.email)
@@ -46,13 +43,40 @@ module.exports = function (dbClient) {
     // await db.login(email)
     return await db.getUser(email)
   }
+  accounts.checkLogin = async function (email, password) {
+    const pass = await encrypt(password)
+    return await db.checkLogin(email, pass)
+  }
 
   accounts.logout = async function (email) {
     return db.logout(email)
   }
 
-  accounts.update = async function (email, name, phone) {
-    return db.updateUser(email, name, phone)
+  accounts.addItem = async function (itemObj) {
+    itemObj.date_added = Date.now()
+    itemObj.sold = "false"
+    itemObj.item_id = uuidv4()
+    console.log('uuid ' + itemObj.item_id)
+    const success = db.addItem(itemObj)
+    if (success){
+      return itemObj.item_id
+    }
+    else{
+      return null
+    }
+  }
+  accounts.sellItem = async function (item_id, buyer_id) {
+    try {
+      const seller_id = await db.findItem(item_id)
+      console.log('this is the seller_id from controller ' + seller_id)
+      const dateSold = Date.now()
+      const success1 = await db.modifyItemToSold(item_id)
+      const success2 = await db.addSoldItem(item_id, buyer_id, seller_id, dateSold)
+    } catch (error) {
+      console.log("error in sell items")
+      console.log(error)
+    }
+    return null
   }
 
   return accounts
