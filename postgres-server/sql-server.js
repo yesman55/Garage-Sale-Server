@@ -44,13 +44,26 @@ module.exports = async function (dbClient, port = 0) {
       res.sendStatus(400)
     }
   })
-
-  app.post('/users/sellItem', async (req, res) =>{
+//NOT DONE YET NEED MORE WORK
+  app.post('/users/sellItem', async (req, res) => {
     const { item_id, buyer_id } = req.body
     console.log('selling item id is ' + item_id)
     const Success = await accounts.sellItem(item_id, buyer_id)
     res.sendStatus(200)
   })
+
+  app.get('/users/getAllItems', async (req, res) => {
+    const allItems = await accounts.getAllItems()
+    console.log(allItems, typeof allItems)
+    if(allItems != null){
+      res.send(allItems)
+    }
+    else{
+      res.sendStatus(400)
+    }
+  })
+
+  
 
   app.post('/change-password', async (req, res) => {
     // const { newPassword, oldPassword } = req.body

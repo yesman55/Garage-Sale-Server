@@ -78,6 +78,14 @@ module.exports = function (dbClient) {
     }
     return null
   }
+  accounts.getAllItems = async function () {
+    try {
+      const allItems = await db.getAllItems()
+      return allItems
+    } catch (error) {
+      console.log('error log' + error)
+    }
+  }
 
   return accounts
 }
