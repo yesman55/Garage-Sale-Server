@@ -56,7 +56,7 @@ module.exports = function (client) {
     })
     return rows[0].seller_ids || null
   }
-  dbAccounts.modifyItemToSold() = async function (item_id) {
+  dbAccounts.modifyItemToSold = async function (item_id) {
     const { rowCount } = await client.query({
       text: 'UPDATE items SET sold = \'true\' WHERE item_id = $1',
       values: [ item_id ]
@@ -65,6 +65,13 @@ module.exports = function (client) {
   }
   dbAccounts.addSoldItem = async function (item_id, buyer_id, ) {
 
+  }
+  dbAccounts.getAllItems = async function () {
+    const allItems = await client.query({
+      text : 'SELECT * FROM items WHERE sold = \'false\''
+    })
+    console.log(allItems.rows, typeof allItems.rows)
+    return allItems.rows
   }
 
 
