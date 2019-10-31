@@ -36,13 +36,24 @@ module.exports = function (client) {
     })
     return rowCount > 0
   }
-  dbAccounts.findItem = async function () {
-    const { item } = await client.query({
-      text: 'SELECT * FROM items WHEERE item_id = $1',
+  dbAccounts.findItem = async function (item_id) {
+    const { rows } = await client.query({
+      text: 'SELECT seller_ids FROM items WHERE item_id = $1',
       values: [ item_id ]
     })
-    return row[0] || null
+    return rows[0].seller_ids || null
   }
+  dbAccounts.modifyItemToSold() = async function (item_id) {
+    const { rowCount } = await client.query({
+      text: 'UPDATE items SET sold = \'true\' WHERE item_id = $1',
+      values: [ item_id ]
+    })
+    return rowCount > 0
+  }
+  dbAccounts.addSoldItem = async function (item_id, buyer_id, ) {
+
+  }
+
 
   dbAccounts.login = async function (email) {
     // TODO: hook up to table that tracks logged in users

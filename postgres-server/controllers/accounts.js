@@ -65,13 +65,18 @@ module.exports = function (dbClient) {
       return null
     }
   }
-  accounts.sellItem = async function (item_id) {
+  accounts.sellItem = async function (item_id, buyer_id) {
     try {
-      const item = db.findItem(item_id)
+      const seller_id = await db.findItem(item_id)
+      console.log('this is the seller_id from controller ' + seller_id)
+      const dateSold = Date.now()
+      const success1 = await db.modifyItemToSold(item_id)
+      const success2 = await db.addSoldItem(item_id, buyer_id, seller_id, dateSold)
     } catch (error) {
       console.log("error in sell items")
+      console.log(error)
     }
-    console.log(item, typeof item)
+    return null
   }
 
   return accounts
