@@ -1,6 +1,6 @@
 const dbAccounts = require('../database/accounts')
 const crypto = require('crypto')
-
+const uuidv4 = require('uuid/v4')
 const secret = process.env.secret || 'this is a terrible secret'
 
 module.exports = function (dbClient) {
@@ -55,8 +55,23 @@ module.exports = function (dbClient) {
   accounts.addItem = async function (itemObj) {
     itemObj.date_added = Date.now()
     itemObj.sold = "false"
+    itemObj.item_id = uuidv4()
+    console.log('uuid ' + itemObj.item_id)
     const success = db.addItem(itemObj)
-    return success
+    if (success){
+      return itemObj.item_id
+    }
+    else{
+      return null
+    }
+  }
+  accounts.sellItem = async function (item_id) {
+    try {
+      const item = db.findItem(item_id)
+    } catch (error) {
+      console.log("error in sell items")
+    }
+    console.log(item, typeof item)
   }
 
   return accounts

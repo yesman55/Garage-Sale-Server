@@ -28,15 +28,21 @@ module.exports = async function (dbClient, port = 0) {
   app.post('/users/addItem', async (req, res) => {
     const {  item_name, item_descr, price, user_id, area_code, seller_id } = req.body
     console.log(item_name + ' ' + item_descr)
-    const success = await accounts.addItem({  item_name, item_descr, price, user_id, area_code, seller_id })
-    if(success){
-      res.sendStatus(200)
-    }
-    else{
+    const item_id = await accounts.addItem({  item_name, item_descr, price, user_id, area_code, seller_id })
+    if (item_id != null) {
+      returnObj = {"Msg":"Success", "item_id":item_id} 
+      res.send(returnObj)
+    } else {
       res.sendStatus(400)
     }
   })
 
+  app.post('/users/sellItem', async (req, res) =>{
+    const { item_id } = req.body
+    console.log('selling item id is ' + item_id)
+    const Success = await accounts.sellItem(item_id)
+    res.sendStatus(200)
+  })
 
   app.post('/change-password', async (req, res) => {
     // const { newPassword, oldPassword } = req.body

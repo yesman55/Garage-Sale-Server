@@ -29,17 +29,19 @@ module.exports = function (client) {
     return rows[0] || null
   }
   dbAccounts.addItem = async function (itemObj) {
-    const {  item_name, item_descr, price, user_id, area_code, seller_id, date_added, sold } = itemObj;
+    const {  item_id, item_name, item_descr, price, user_id, area_code, seller_id, date_added, sold } = itemObj;
     const {  rowCount  } = await client.query({
-      text: 'INSERT INTO items (price, item_name, item_descr, date_added, user_id, area_code, sold, seller_ids) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-      values: [ price, item_name, item_descr, date_added, user_id, area_code, sold, seller_id ]
+      text: 'INSERT INTO items (item_id, price, item_name, item_descr, date_added, user_id, area_code, sold, seller_ids) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+      values: [ item_id, price, item_name, item_descr, date_added, user_id, area_code, sold, seller_id ]
     })
     return rowCount > 0
   }
-  dbAccounts.removeItem = async function () {
-    const {  rowCount  } = await client.query({
-
+  dbAccounts.findItem = async function () {
+    const { item } = await client.query({
+      text: 'SELECT * FROM items WHEERE item_id = $1',
+      values: [ item_id ]
     })
+    return row[0] || null
   }
 
   dbAccounts.login = async function (email) {
