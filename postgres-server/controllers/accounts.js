@@ -95,6 +95,14 @@ module.exports = function (dbClient) {
       console.log('error ', error)
     }
   }
+  accounts.getUserInfo = async function (userId) {
+    try {
+      const userInfo = await db.getUserInfo(userId)
+      return userInfo
+    } catch (error) {
+      console.log('error ', error)
+    }
+  }
 
   return accounts
 }

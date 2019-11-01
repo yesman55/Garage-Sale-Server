@@ -76,6 +76,17 @@ module.exports = async function (dbClient, port = 0) {
     }
   })
 
+  app.get('/users/getUserInfo/:userId', async (req, res) => {
+    const userId = req.params.userId
+    const userInfo = await accounts.getUserInfo(userId)
+    if(userInfo != null){
+      res.status(200).send(userInfo)
+    }
+    else{
+      res.sendStatus(400)
+    }
+  })
+
   app.post('/change-password', async (req, res) => {
     // const { newPassword, oldPassword } = req.body
     // const user = req.user
