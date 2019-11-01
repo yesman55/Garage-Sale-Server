@@ -85,6 +85,13 @@ module.exports = function (client) {
     })
     return userItems.rows
   }
+  dbAccounts.getUserInfo = async function (userId) {
+    const userInfo = await client.query({
+      text: 'SELECT * FROM users WHERE user_id = $1',
+      values: [ userId ]
+    })
+    return userInfo.rows
+  }
 
 
   dbAccounts.login = async function (email) {
