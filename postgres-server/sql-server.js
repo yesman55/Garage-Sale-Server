@@ -24,7 +24,7 @@ module.exports = async function (dbClient, port = 0) {
     } = req.body
     const user = await accounts.login(email, password)
     if (user) {
-      console.log(user)
+      //console.log(user)
       res.json(user)
     } else {
       res.sendStatus(400)
@@ -33,7 +33,7 @@ module.exports = async function (dbClient, port = 0) {
 
   app.post('/users/addItem', async (req, res) => {
     const {  item_name, item_descr, price, user_id, area_code, seller_id } = req.body
-    console.log(item_name + ' ' + item_descr)
+    //console.log(item_name + ' ' + item_descr)
     const item_id = await accounts.addItem({  item_name, item_descr, price, user_id, area_code, seller_id })
     if (item_id != null) {
       returnObj = {"Msg":"Success", "item_id":item_id} 
@@ -42,10 +42,9 @@ module.exports = async function (dbClient, port = 0) {
       res.sendStatus(400)
     }
   })
-//NOT DONE YET NEED MORE WORK
   app.post('/users/sellItem', async (req, res) => {
     const { item_id, buyer_id } = req.body
-    console.log('selling item id is ' + item_id)
+    //console.log('selling item id is ' + item_id)
     const Success = await accounts.sellItem(item_id, buyer_id)
     if(Success){
       res.status(200).send({msg: "item sold"})
@@ -57,7 +56,7 @@ module.exports = async function (dbClient, port = 0) {
 
   app.get('/users/getAllItems', async (req, res) => {
     const allItems = await accounts.getAllItems()
-    console.log(allItems, typeof allItems)
+    //console.log(allItems, typeof allItems)
     if(allItems != null){
       res.send(allItems)
     }
@@ -97,14 +96,14 @@ module.exports = async function (dbClient, port = 0) {
       email,
       id_photo
     } = req.body;
-    console.log({
-      user_id,
-      password,
-      firstName,
-      lastName,
-      email,
-      id_photo
-    })
+    // console.log({
+    //   user_id,
+    //   password,
+    //   firstName,
+    //   lastName,
+    //   email,
+    //   id_photo
+    // })
     const User = await accounts.createUser({
       user_id,
       password,

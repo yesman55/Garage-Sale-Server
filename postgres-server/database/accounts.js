@@ -61,7 +61,7 @@ module.exports = function (client) {
       text: 'UPDATE items SET sold = \'true\' WHERE item_id = $1',
       values: [ item_id ]
     })
-    return rowCount > 0
+    return null
   }
   dbAccounts.addSoldItem = async function (item_id, buyer_id, seller_id, dateSold) {
     const { rowCount } = await client.query({

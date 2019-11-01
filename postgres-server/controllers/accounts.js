@@ -71,18 +71,13 @@ module.exports = function (dbClient) {
       const seller_id = await db.findItem(item_id)
       console.log('this is the seller_id from controller ' + seller_id)
       const dateSold = Date.now()
-      const success1 = await db.modifyItemToSold(item_id)
-      const success2 = await db.addSoldItem(item_id, buyer_id, seller_id, dateSold)
+      await db.modifyItemToSold(item_id)
+      await db.addSoldItem(item_id, buyer_id, seller_id, dateSold)
     } catch (error) {
       console.log("error in sell items")
       console.log(error)
     }
-    if(success1 && success2){
-      return true
-    }
-    else{
-      return false
-    }
+    return true
   }
   accounts.getAllItems = async function () {
     try {
