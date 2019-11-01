@@ -63,7 +63,16 @@ module.exports = async function (dbClient, port = 0) {
     }
   })
 
-  
+  app.get('/users/getItemsById/:userId', async (req, res) => {
+    const userId = req.params.userId
+    const userItems = await accounts.getUserItems(userId)
+    if(userItems != null){
+      res.send(userItems)
+    }
+    else{
+      res.sendStatus(400)
+    }
+  })
 
   app.post('/change-password', async (req, res) => {
     // const { newPassword, oldPassword } = req.body

@@ -74,6 +74,14 @@ module.exports = function (client) {
     return allItems.rows
   }
 
+  dbAccounts.getUserItems = async function (userId) {
+    const userItems = await client.query({
+      text: 'SELECT * FROM items WHERE user_id = $1',
+      values: [ userId ]
+    })
+    return userItems.rows
+  }
+
 
   dbAccounts.login = async function (email) {
     // TODO: hook up to table that tracks logged in users
