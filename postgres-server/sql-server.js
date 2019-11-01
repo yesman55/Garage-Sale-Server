@@ -22,8 +22,6 @@ module.exports = async function (dbClient, port = 0) {
       email,
       password
     } = req.body
-    console.log(password + ' ' + typeof password)
-    console.log(req.body)
     const user = await accounts.login(email, password)
     if (user) {
       console.log(user)
@@ -49,7 +47,12 @@ module.exports = async function (dbClient, port = 0) {
     const { item_id, buyer_id } = req.body
     console.log('selling item id is ' + item_id)
     const Success = await accounts.sellItem(item_id, buyer_id)
-    res.sendStatus(200)
+    if(Success){
+      res.status(200).send({msg: "item sold"})
+    }
+    else{
+      res.status(400).send({msg: "error in selling"})
+    }
   })
 
   app.get('/users/getAllItems', async (req, res) => {
@@ -111,9 +114,9 @@ module.exports = async function (dbClient, port = 0) {
       id_photo
     })
     if (User) {
-      res.sendStatus(200)
+      res.status(200).send({msg: "user created" })
     } else {
-      res.sendStatus(400)
+      res.status(400).send({msg: "user already exist"})
     }
   })
 

@@ -23,14 +23,15 @@ module.exports = function (dbClient) {
 
   accounts.createUser = async function (registerObj) {
     const user = await accounts.getUser(registerObj.email)
-    if (user) {
-      const err = Error('Account already exists')
-      err.statusCode = 400
-      throw err
+    if(user === null){
+      const encryptedPass = await encrypt(registerObj.password)
+      registerObj.password = encryptedPass
+      return await db.createAccount(registerObj)
     }
-    const encryptedPass = await encrypt(registerObj.password)
-    registerObj.password = encryptedPass
-    return await db.createAccount(registerObj)
+    else{
+      return false
+    }
+    
   }
 
   accounts.getUser = async function (email) {
@@ -76,7 +77,12 @@ module.exports = function (dbClient) {
       console.log("error in sell items")
       console.log(error)
     }
-    return null
+    if(success1 && success2){
+      return true
+    }
+    else{
+      return false
+    }
   }
   accounts.getAllItems = async function () {
     try {
