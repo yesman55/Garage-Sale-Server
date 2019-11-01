@@ -86,6 +86,14 @@ module.exports = function (dbClient) {
       console.log('error log' + error)
     }
   }
+  accounts.getUserItems = async function (userId) {
+    try {
+      const userItems = await db.getUserItems(userId)
+      return userItems
+    } catch (error) {
+      console.log('error ', error)
+    }
+  }
 
   return accounts
 }
