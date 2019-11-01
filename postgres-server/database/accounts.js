@@ -63,8 +63,12 @@ module.exports = function (client) {
     })
     return rowCount > 0
   }
-  dbAccounts.addSoldItem = async function (item_id, buyer_id, ) {
-
+  dbAccounts.addSoldItem = async function (item_id, buyer_id, seller_id, dateSold) {
+    const { rowCount } = await client.query({
+      text: 'INSERT INTO sold_items (item_id, date_sold, seller_id, buyer_id) VALUES ($1, $2, $3, $4)',
+      values: [item_id, dateSold, seller_id, buyer_id]
+    })
+    return rowCount > 0
   }
   dbAccounts.getAllItems = async function () {
     const allItems = await client.query({
