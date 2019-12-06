@@ -1,6 +1,7 @@
 ﻿const express = require('express');
 const router = express.Router();
-const userService = require('./user.service');
+const userService = require('./user.service.js');
+const itemService = require('../items/item.service.js');
 
 // routes
 router.post('/authenticate', authenticate);
@@ -10,6 +11,9 @@ router.get('/current', getCurrent);
 router.get('/:id', getById);
 router.put('/:id', update);
 router.delete('/:id', _delete);
+router.post('/addItem', addItem);
+router.get('/getAllItems', getAllItems);
+router.get('/getItemsById/:userId', getUserItems);
 
 module.exports = router;
 
@@ -53,4 +57,23 @@ function _delete(req, res, next) {
     userService.delete(req.params.id)
         .then(() => res.json({}))
         .catch(err => next(err));
+}
+
+function addItem(req, res, next) {
+    itemService.addItem(req.body)
+        .then(() => res.json({}))
+        .catch(err => next(err));
+}
+
+function getAllItems(req, res, next) {
+    itemService.getAllItems()
+    .then(items => items ? res.json(items) : res.sendStatus(404))
+    .catch(err => next(err));
+}
+
+function getUserItems(req, res, next) {
+    console.log(req.params.userId);
+    itemService.getUserItems(req.params.userId)
+    .then(items => items ? res.json(items) : res.sendStatus(404))
+    .catch(err => next(err));
 }

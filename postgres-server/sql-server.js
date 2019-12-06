@@ -32,9 +32,9 @@ module.exports = async function (dbClient, port = 0) {
   })
 
   app.post('/users/addItem', async (req, res) => {
-    const {  item_name, item_descr, price, user_id, area_code, seller_id } = req.body
+    const {  item_name, item_descr, price, userId, area_code, seller_id } = req.body
     //console.log(item_name + ' ' + item_descr)
-    const item_id = await accounts.addItem({  item_name, item_descr, price, user_id, area_code, seller_id })
+    const item_id = await accounts.addItem({  item_name, item_descr, price, userId, area_code, seller_id })
     if (item_id != null) {
       returnObj = {"Msg":"Success", "item_id":item_id} 
       res.send(returnObj)
@@ -56,7 +56,7 @@ module.exports = async function (dbClient, port = 0) {
 
   app.get('/users/getAllItems', async (req, res) => {
     const allItems = await accounts.getAllItems()
-    //console.log(allItems, typeof allItems)
+    // console.log(allItems, typeof allItems);
     if(allItems != null){
       res.send(allItems)
     }
@@ -100,23 +100,15 @@ module.exports = async function (dbClient, port = 0) {
 
   app.post('/users/register', async (req, res) => {
     const {
-      user_id,
+      userId,
       password,
       firstName,
       lastName,
       email,
       id_photo
     } = req.body;
-    // console.log({
-    //   user_id,
-    //   password,
-    //   firstName,
-    //   lastName,
-    //   email,
-    //   id_photo
-    // })
     const User = await accounts.createUser({
-      user_id,
+      userId,
       password,
       firstName,
       lastName,

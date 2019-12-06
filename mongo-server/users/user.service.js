@@ -1,6 +1,6 @@
-﻿const config = require('config.json');
+﻿const config = require('../config.json');
 const bcrypt = require('bcryptjs');
-const db = require('_helpers/db');
+const db = require('../_helpers/db');
 const User = db.User;
 
 module.exports = {
@@ -15,11 +15,11 @@ module.exports = {
 async function authenticate({ email, password }) {
     const user = await User.findOne({ email });
     if (user) {
-        const userObj = user.toObject();
-        return {
-            token
-        };
+        if (password === user.password) {
+            return user.toObject();
+        }
     }
+    return false;
 }
 
 async function getAll() {
@@ -37,11 +37,6 @@ async function create(userParam) {
     }
 
     const user = new User(userParam);
-
-    // hash password
-    if (userParam.password) {
-        user.hash = bcrypt.hashSync(userParam.password, 10);
-    }
 
     // save user
     await user.save();
